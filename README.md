@@ -8,4 +8,4 @@ $ mapshaper [name].geojson snap -simplify .05 -o [newname].geojson
 
 Convert to TopoJSON using topojson: https://github.com/mbostock/topojson/wiki
 
-$ topojson -o [name].json [name].json
+$ topojson -o [name].json [name].geojson -p
