@@ -16,9 +16,8 @@ curl 'https://data.calgary.ca/api/geospatial/cje4-zd6c?method=export&format=GeoJ
 
 Make sure you have d3-geo-projection installed via `npm install -g d3-geo-projection` and have a quick look at the default polygons as svg:
 ```
-geoproject 'd3.geoAlbers().fitSize([960,960], d)' < census-by-community-2016.geojson | geo2svg -w 960 -h 960 > census-by-community-2016.svg
+geoproject 'd3.geoAlbers().fitSize([500,500], d)' < census-by-community-2016.geojson | geo2svg -w 500 -h 500 > census-by-community-2016.svg
 ```
-![community boundaries](https://github.com/camstark/calgis/blob/gh-pages/census-by-community-2016.svg "Calgary Community Boundaries")
 ![community boundaries](https://camstark.github.io/calgis/census-by-community-2016.svg "Calgary Community Boundaries")
 
 
@@ -38,7 +37,7 @@ The percentage option in the simplification was initially chosen interactively b
 
 Take a look at the output to ensure the simplification is not too much or too little:
 ```
-geoproject 'd3.geoAlbers().fitSize([960,960], d)' < community-2016-simple.json | geo2svg -w 960 -h 960 > community-2016-simple.svg
+geoproject 'd3.geoAlbers().fitSize([500,500], d)' < community-2016-simple.json | geo2svg -w 500 -h 500 > community-2016-simple.svg
 ```
 
 ![community boundaries](https://camstark.github.io/calgis/community-2016-simple.svg "Simplified Calgary Community Boundaries")
