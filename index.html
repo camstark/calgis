@@ -1,5 +1,72 @@
-<html>
+<!DOCTYPE html>
+<meta charset="utf-8">
+
 <body>
-...
-</body>
-</html>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+    <script>
+        var width = $(window).width(),
+            height = $(window).height();
+
+        // var colour = d3.scale.category10();
+        // var colour = d3.scale.ordinal().range(['#8dd3c7', '#ffffb3', '#bebada', '#fb8072'])
+        // var colour = d3.scale.ordinal().range(['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3'])
+        var colour = d3.scale.ordinal().range(['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f'])
+
+        var projection = d3.geo.mercator();
+
+        var path = d3.geo.path()
+            .projection(projection);
+
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        d3.json("https://camstark.github.io/calgis/community-2016-quantized-topo.json", function(error, yyc) {
+
+            var communityPolygons = topojson.feature(yyc, yyc.objects.collection);
+            var neighbors = topojson.neighbors(yyc.objects.collection.geometries);
+            var communityBoundaries = topojson.mesh(yyc, yyc.objects.collection, function(a, b) {
+                return a !== b;
+            })
+
+            projection
+                .scale(1)
+                .translate([0, 0])
+
+            var b = path.bounds(communityPolygons),
+                s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
+                t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+
+            projection
+                .scale(s)
+                .translate(t)
+
+            svg.selectAll(".communities")
+                .data(communityPolygons.features)
+                .enter().append("path")
+                .style("fill", function(d, i) {
+                    return colour(d.colour = d3.max(neighbors[i], function(n) {
+                        return communityPolygons.features[n].colour;
+                    }) + 1 | 0);
+                })
+                // .style("fill", function(d) {
+                //     return colour(d.properties.class);
+                // })
+                .attr("d", path);
+
+
+            svg.append("path")
+                .datum(communityBoundaries)
+                .style({
+                    "fill": "none",
+                    "stroke": "#fff",
+                    "stroke-width": ".5px",
+                    "stroke-linejoin": "round"
+                })
+                .attr("d", path)
+
+
+        });
+    </script>

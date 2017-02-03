@@ -56,6 +56,7 @@ To efficiently load for display in the browser, the original GeoJSON went from 3
 topoquantize 1e5 community-2016-simple-topo.json > community-2016-quantized-topo.json
 ```
 
+There's a simple d3 map running off of this file at http://camstark.github.io/calgis/
 
 ### Version 1.0
 
